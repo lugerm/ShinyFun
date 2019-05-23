@@ -2,47 +2,37 @@ library(shiny)
 library(utils)
 library(gridExtra)
 
-s <- swiss
-snames <- colnames(s)
+
+#s <- swiss
+#snames <- colnames(s)
 
 ui <- fluidPage(
   navbarPage(title = 'perffizienz - wrong on so many levels',
-    tabPanel('Swiss',
-             sidebarLayout(
-               sidebarPanel(actionButton('Show Distribution', label = 'histogram'),
-                            actionButton('QQ-Plot', label = 'qq-plot'),
-                            actionButton('Correlation', label = 'correlation')),
-               mainPanel(
-                 #tableOutput('rawDataSwiss'),
-                 plotOutput("hist")
-               ))),
-
-    
- 
-    tabPanel('Cars',
+    tabPanel(
              sidebarLayout
-             (
-               sidebarPanel
-               (
-                 radioButtons(inputId = 'dataSet', label = 'Choose wisely:',
-                                         choices = snames,
-                                         selected = 'mtcars')
-                ),
-               mainPanel
-               (
-                 tableOutput('rawDataMtcars')
-               )
-             )
-             )
-    ))
+              (
+               sidebarPanel(
+                  selectInput("dataset", "pick your data", choices = c("Education", "Catholic"))
+              )
+              ,
+               
+            mainPanel(
+              verbatimTextOutput("summary")
+              )
+             ))))
 
-
-
-server <- function(input, output)
-  {
-    output$rawDataSwiss <- renderTable(swiss)
-    output$hist <- renderPlot({hist(swiss$Fertility)})
-    output$rawDataMtcars <- renderTable(mtcars)
+  
+server <- function(input, output){
+  datasetInput <- reactive({
+    switch(input$dataset,
+           "Eduction" = swiss$Education,
+           "Catholic" = swiss$Catholic)
+  })  
+  
+  output$summary <- renderPrint({
+    dataset <- datasetInput()
+    summary(dataset)
+  })
   }
 
 shinyApp(ui = ui, server = server)
