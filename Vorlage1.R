@@ -22,7 +22,8 @@ ui <- fluidPage(
               mainPanel(
                 verbatimTextOutput("summary"),
                 plotOutput("hist"),
-                plotOutput("boxplot")
+                plotOutput("boxplot"),
+                plotOutput("qqplot")
                 )
              ))))
 
@@ -52,6 +53,9 @@ server <- function(input, output){
     dataset <- datasetInput()
     boxplot(dataset)})
   
+  output$qqplot <- renderPlot({
+    dataset <- datasetInput()
+    qqnorm(dataset)})
   }
 
 shinyApp(ui = ui, server = server)
