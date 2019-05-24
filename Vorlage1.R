@@ -11,22 +11,31 @@ library(gridExtra)
 
 ui <- fluidPage(
   navbarPage(title = 'perffizienz - wrong on so many levels',
-    tabPanel('swiss',
+    #tabPanel('swiss raw data', "Mein Text"),
+    tabPanel('swiss', tags$h2("Overview - Head of Dataset"), #tableOutput("rawdata_swiss"),
              sidebarLayout
               (
-               sidebarPanel
+                
+                sidebarPanel
                 (
                   selectInput("dataset", "pick your data", choices = c("Fertility", "Agriculture", "Examination", "Education", "Catholic", "Infant.Mortality" ))
                 ),
                 
-              mainPanel(
-                tableOutput("rawdata_swiss"),
-                verbatimTextOutput("summary"),
-                plotOutput("hist"),
-                plotOutput("boxplot"),
-                plotOutput("qqplot")
+              mainPanel(tags$h2("Data in more detail:"),
+                  #tableOutput("rawdata_swiss"),
+                  #verbatimTextOutput("summary"),
+                  #plotOutput("hist"),
+                  #plotOutput("boxplot"),
+                  tabsetPanel(
+                    tabPanel("All data", tableOutput("rawdata_swiss") ),
+                    tabPanel("Summary", verbatimTextOutput("summary") ),
+                    tabPanel("Histogram & Boxplot", plotOutput("hist"), plotOutput("boxplot")),
+                    tabPanel("QQ-Plot", plotOutput("qqplot"))
+                  )
                 )
-             ))))
+             )),
+    tabPanel('XXX', "TEXT")
+    ))
 
   
 server <- function(input, output){
@@ -44,7 +53,7 @@ server <- function(input, output){
  
   output$rawdata_swiss <- renderTable({
     dataset <- swiss
-    head(dataset)})
+    dataset})  # head(dataset)
    
   output$summary <- renderPrint({
     dataset <- datasetInput()
