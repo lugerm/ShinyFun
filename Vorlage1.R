@@ -21,7 +21,8 @@ ui <- fluidPage(
                
               mainPanel(
                 verbatimTextOutput("summary"),
-                plotOutput("hist")
+                plotOutput("hist"),
+                plotOutput("boxplot")
                 )
              ))))
 
@@ -46,6 +47,10 @@ server <- function(input, output){
   output$hist <- renderPlot({
     dataset <- datasetInput()
     hist(dataset)})
+  
+  output$boxplot <- renderPlot({
+    dataset <- datasetInput()
+    boxplot(dataset)})
   
   }
 
