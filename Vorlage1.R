@@ -18,8 +18,9 @@ ui <- fluidPage(
                 (
                   selectInput("dataset", "pick your data", choices = c("Fertility", "Agriculture", "Examination", "Education", "Catholic", "Infant.Mortality" ))
                 ),
-               
+                
               mainPanel(
+                tableOutput("rawdata_swiss"),
                 verbatimTextOutput("summary"),
                 plotOutput("hist"),
                 plotOutput("boxplot"),
@@ -40,7 +41,11 @@ server <- function(input, output){
            "Infant.Mortality" = swiss$Infant.Mortality
            )
   })  
-  
+ 
+  output$rawdata_swiss <- renderTable({
+    dataset <- swiss
+    head(dataset)})
+   
   output$summary <- renderPrint({
     dataset <- datasetInput()
     summary(dataset)})
@@ -55,7 +60,7 @@ server <- function(input, output){
   
   output$qqplot <- renderPlot({
     dataset <- datasetInput()
-    qqnorm(dataset)})
+    qqnorm(dataset); qqline(dataset, col=2)})
   }
 
 shinyApp(ui = ui, server = server)
