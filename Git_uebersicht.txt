@@ -1,0 +1,16 @@
+git pull origin master // damit ich up to date bin
+
+git checkout -b *neuer Branchname* // jetzt bin ich im neuen Branch. dieser enthält alle files, die auch im master sind! hier kann ich gefahrlos bearbeiten
+git branch -v  // überprüfen, in welchem branch ich bin
+
+git status
+git add Vorlage1.R 
+git commit -m "added a comment in line 1"  // ich habe etwas im file Vorlage1 geändert, es funktioniert, ich committe.
+
+
+git checkout master // ich wills übernehmen ins Hauptprojekt, daher switch ich zuerst in MEINEN master...
+git merge *neuer Branchname*  // ...jetzt merge ich meine Änderungen im neuen Branch mit MEINEM master
+git push // jetzt pushe ich von MEINEM master in den REMOTE master
+
+
+git reset master  // aktueller Branch wird auf den master zurücksetzt
