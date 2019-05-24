@@ -14,30 +14,39 @@ ui <- fluidPage(
     tabPanel('swiss',
              sidebarLayout
               (
-               sidebarPanel(
-                  selectInput("dataset", "pick your data", choices = c("Education", "Catholic", "Fertility"))
-              )
-              ,
+               sidebarPanel
+                (
+                  selectInput("dataset", "pick your data", choices = c("Fertility", "Agriculture", "Examination", "Education", "Catholic", "Infant.Mortality" ))
+                ),
                
-            mainPanel(
-              verbatimTextOutput("summary")
-              )
+              mainPanel(
+                verbatimTextOutput("summary"),
+                plotOutput("hist")
+                )
              ))))
 
   
 server <- function(input, output){
   datasetInput <- reactive({
     switch(input$dataset,
+           "Fertility" = swiss$Fertility,
+           "Agriculture" = swiss$Agriculture,
+           "Examination" = swiss$Examination,
            "Education" = swiss$Education,
            "Catholic" = swiss$Catholic,
-           "Fertility" = swiss$Fertility
+           "Fertility" = swiss$Fertility,
+           "Infant.Mortality" = swiss$Infant.Mortality
            )
   })  
   
   output$summary <- renderPrint({
     dataset <- datasetInput()
-    summary(dataset)
-  })
+    summary(dataset)})
+  
+  output$hist <- renderPlot({
+    dataset <- datasetInput()
+    hist(dataset)})
+  
   }
 
 shinyApp(ui = ui, server = server)
