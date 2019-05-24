@@ -18,7 +18,8 @@ ui <- fluidPage(
                 
                 sidebarPanel
                 (
-                  selectInput("dataset", "pick your data", choices = c("Fertility", "Agriculture", "Examination", "Education", "Catholic", "Infant.Mortality" ))
+                  selectInput("dataset", "Pick a variable", choices = c("Fertility", "Agriculture", "Examination", "Education", "Catholic", "Infant.Mortality" )),
+                  radioButtons("options", "Options", choices = c("Correlations", "Linear Model"))
                 ),
                 
               mainPanel(tags$h2("Data in more detail:"),
