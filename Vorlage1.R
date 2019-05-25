@@ -1,12 +1,8 @@
-# new comment
-a <- c(1,2,3)
-
 library(shiny)
 library(utils)
 library(gridExtra)
 
-
-#s <- swiss
+swiss <- swiss[,-3]
 #snames <- colnames(s)
 
 ui <- fluidPage(
@@ -18,7 +14,7 @@ ui <- fluidPage(
                 
                 sidebarPanel
                 (
-                  selectInput("dataset", "Pick a variable", choices = c("Fertility", "Agriculture", "Examination", "Education", "Catholic", "Infant.Mortality" )),
+                  selectInput("dataset", "Pick a variable", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
                   radioButtons("options", "Options", choices = c("Correlations", "Linear Model"))
                 ),
                 
