@@ -31,7 +31,8 @@ ui <- fluidPage(
                     tabPanel("All data", tableOutput("rawdata_swiss") ),
                     tabPanel("Summary", verbatimTextOutput("summary") ),
                     tabPanel("Histogram & Boxplot", plotOutput("hist"), plotOutput("boxplot")),
-                    tabPanel("QQ-Plot", plotOutput("qqplot"))
+                    tabPanel("QQ-Plot", plotOutput("qqplot")),
+                    textOutput("Lin.Modell")
                   )
                 )
              )),
@@ -50,7 +51,8 @@ server <- function(input, output){
            "Fertility" = swiss$Fertility,
            "Infant.Mortality" = swiss$Infant.Mortality
            )
-  })  
+  })
+  
  
   output$rawdata_swiss <- renderTable({
     dataset <- swiss
@@ -71,6 +73,11 @@ server <- function(input, output){
   output$qqplot <- renderPlot({
     dataset <- datasetInput()
     qqnorm(dataset); qqline(dataset, col=2)})
-  }
+
+
+  #output$Lin.Modell <-  renderText({
+   # lin <- lm(Education ~ Agriculture + Fertility + Infant.Mortality + Catholic)
+    #step(lin)})
+    }
 
 shinyApp(ui = ui, server = server)
