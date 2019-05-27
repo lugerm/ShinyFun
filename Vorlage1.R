@@ -32,7 +32,7 @@ ui <- fluidPage(
                     tabPanel("Summary", verbatimTextOutput("summary") ),
                     tabPanel("Histogram & Boxplot", plotOutput("hist"), plotOutput("boxplot")),
                     tabPanel("QQ-Plot", plotOutput("qqplot")),
-                    textOutput("Lin.Modell")
+                    tabPanel("Linear Model", textOutput("regression"))
                   )
                 )
              )),
@@ -75,9 +75,11 @@ server <- function(input, output){
     qqnorm(dataset); qqline(dataset, col=2)})
 
 
-  #output$Lin.Modell <-  renderText({
-   # lin <- lm(Education ~ Agriculture + Fertility + Infant.Mortality + Catholic)
-    #step(lin)})
+  output$regression <-  renderPrint({
+    fit <- lm(swiss[,input$dataset] ~ Agriculture + Fertility + Infant.Mortality + Catholic + Education)
+    summary(fit)})
     }
-
+#     fit <- lm(swiss[,input$outcome] ~ swiss[,input$indepvar])
+#names(fit$coefficients) <- c("Intercept", input$var2)
+#summary(fit)
 shinyApp(ui = ui, server = server)
