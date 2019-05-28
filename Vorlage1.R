@@ -27,7 +27,8 @@ ui <- fluidPage(
                     tabPanel("All data", tableOutput("rawdata_swiss") ),
                     tabPanel("Summary", verbatimTextOutput("summary") ),
                     tabPanel("Histogram & Boxplot", plotOutput("hist"), plotOutput("boxplot")),
-                    tabPanel("QQ-Plot", plotOutput("qqplot"))
+                    tabPanel("QQ-Plot", plotOutput("qqplot")),
+                    tabPanel("Scatterplot", plotOutput("scatter"))
                   )
                 )
              )),
@@ -67,6 +68,11 @@ server <- function(input, output){
   output$qqplot <- renderPlot({
     dataset <- datasetInput()
     qqnorm(dataset); qqline(dataset, col=2)})
-  }
+  
+  output$scatter <- renderPlot({
+    dataset <- datasetInput()
+    pairs(~swiss$Fertility+swiss$Agriculture+swiss$Education+swiss$Catholic+swiss$Infant.Mortality, main="Scatterplot--lines are still missing")})
+}
+
 
 shinyApp(ui = ui, server = server)
