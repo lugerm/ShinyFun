@@ -6,9 +6,9 @@ swiss <- swiss[,-3]
 #snames <- colnames(s)
 
 ui <- fluidPage(
-  navbarPage(title = 'perffizienz - wrong on so many levels',
+  navbarPage(title = 'Swiss Data',
     #tabPanel('swiss raw data', "Mein Text"),
-    tabPanel('swiss', tags$h2("Overview - Head of Dataset"), #tableOutput("rawdata_swiss"),
+    tabPanel('Distribution', tags$h2("Overview - Head of Dataset"), #tableOutput("rawdata_swiss"),
              sidebarLayout
               (
                 
@@ -32,7 +32,8 @@ ui <- fluidPage(
                   )
                 )
              )),
-    tabPanel('XXX', "TEXT")
+    tabPanel('Correlation', "TEXT"),
+    tabPanel('Linear Model', "TEXT")
     ))
 
   
