@@ -2,7 +2,7 @@ library(shiny)
 library(utils)
 library(gridExtra)
 
-swiss <- swiss[,-3]
+swiss <- swiss[,-3]    # remove "Examination" from Dataset
 #snames <- colnames(s)
 
 ##definition for the scatterplo
@@ -22,17 +22,18 @@ panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
 ui <- fluidPage(
   navbarPage(title = 'Swiss Data',
     #tabPanel('swiss raw data', "Mein Text"),
-    tabPanel('Distribution', tags$h2("Overview - Head of Dataset"), #tableOutput("rawdata_swiss"),
+    tabPanel('Exploration', tags$h3("Data Exploration: Distribution of Swiss datasets "), #tableOutput("rawdata_swiss"),
              sidebarLayout
               (
                 
                 sidebarPanel
                 (
-                  selectInput("dataset", "Pick a variable", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
+                  radioButtons("dataset", "Select a Dataset", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
+                  #selectInput("dataset", "Pick a variable", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
                   radioButtons("options", "Options", choices = c("Correlations", "Linear Model"))
                 ),
                 
-              mainPanel(tags$h2("Data in more detail:"),
+              mainPanel(tags$h4("Data and Visualizations:"),
                   #tableOutput("rawdata_swiss"),
                   #verbatimTextOutput("summary"),
                   #plotOutput("hist"),
