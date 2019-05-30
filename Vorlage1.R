@@ -48,13 +48,13 @@ ui <- fluidPage(
                 )
               )),
     tabPanel('Correlation', "TEXT"),
-    tabPanel('Linear Model', tags$h3("Possible linear models")),
+    tabPanel('Linear Model', tags$h3("Enter your dependent and independent variables")),
             sidebarLayout(
               sidebarPanel(
-                selectInput("regressand", "Abhängige Variable", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
-                selectInput("regressor1", "Einflussvariable 1", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
-                selectInput("regressor2", "Einflussvariable 2", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
-                selectInput("regressor3", "Einflussvariable 3", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" ))
+                selectInput("regressand", "Dependent Variable", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
+                selectInput("regressor1", "Independent Variable 1", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
+                selectInput("regressor2", "Independent Variable 2", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
+                selectInput("regressor3", "Independent Variable 3", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" ))
                 
               ),
               mainPanel(tags$h4("Modelle:"),
@@ -104,10 +104,10 @@ server <- function(input, output){
     pairs(swiss, lower.panel = panel.smooth, upper.panel = panel.cor,
           gap=0, row1attop=FALSE, main = "Scatterplot")})
   
-  #output$stepmodel <-  renderPrint({
-   # fit <- lm(swiss[,input$regressand] ~ swiss[,input$regressor1] + swiss[,input$regressor2] + swiss[,input$regressor3])
-    #names(fit$coefficients) <- c("Intercept", input$regressor1, input$regressor2, input$regressor3)
-    #step(fit)})
+  output$stepmodel <- renderPrint({
+    fit <- lm(swiss[,input$regressand] ~ swiss[,input$regressor1] + swiss[,input$regressor2] + swiss[,input$regressor3])
+    names(fit$coefficients) <- c("Intercept", input$regressor1, input$regressor2, input$regressor3)
+    step(fit)})
   
   myformula <- reactive({
     expln <- paste(c(input$regressor1, input$regressor2, input$regressor3), collapse = "+")
@@ -128,9 +128,4 @@ server <- function(input, output){
 }
 
 
-
-    
-#     fit <- lm(swiss[,input$outcome] ~ swiss[,input$indepvar])
-#names(fit$coefficients) <- c("Intercept", input$var2)
-#summary(fit)
 shinyApp(ui = ui, server = server)
