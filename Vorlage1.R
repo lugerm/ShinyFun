@@ -32,7 +32,7 @@ ui <- fluidPage(
                     tabPanel("Summary", verbatimTextOutput("summary") ),
                     tabPanel("Histogram & Boxplot", plotOutput("hist"), plotOutput("boxplot")),
                     tabPanel("QQ-Plot", plotOutput("qqplot")),
-                    tabPanel("Linear Model", textOutput("regression"))
+                    tabPanel("Linear Model", verbatimTextOutput("regression"))
                   )
                 )
              )),
@@ -76,8 +76,8 @@ server <- function(input, output){
 
 
   output$regression <-  renderPrint({
-    fit <- lm(swiss[,input$dataset] ~ Agriculture + Fertility + Infant.Mortality + Catholic + Education)
-    summary(fit)})
+    fit <- lm(swiss[,input$dataset] ~ Agriculture + Catholic + Fertility + Infant.Mortality)
+    step(fit)})
     }
 #     fit <- lm(swiss[,input$outcome] ~ swiss[,input$indepvar])
 #names(fit$coefficients) <- c("Intercept", input$var2)
