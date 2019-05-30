@@ -28,9 +28,9 @@ ui <- fluidPage(
                 
                 sidebarPanel
                 (
-                  radioButtons("dataset", "Select a Dataset", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
+                  radioButtons("dataset", "Select a Dataset", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" ))
                   #selectInput("dataset", "Pick a variable", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
-                  radioButtons("options", "Options", choices = c("Correlations", "Linear Model"))
+                  
                 ),
                 
               mainPanel(tags$h4("Data and Visualizations:"),
@@ -44,12 +44,24 @@ ui <- fluidPage(
                     tabPanel("Histogram & Boxplot", plotOutput("hist"), plotOutput("boxplot")),
                     tabPanel("QQ-Plot", plotOutput("qqplot")),
                     tabPanel("Scatterplot", plotOutput("scatter"))
-                    tabPanel("Linear Model", verbatimTextOutput("regression"))
                   )
                 )
-             )),
+              )),
     tabPanel('Correlation', "TEXT"),
-    tabPanel('Linear Model', "TEXT")
+    tabPanel('Linear Model', tags$h3("Possible linear models")),
+            sidebarLayout(
+              sidebarPanel(
+                selectInput("regressand", "Abhängige Variable", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
+                selectInput("regressor1", "Einflussvariable 1", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
+                selectInput("regressor2", "Einflussvariable 2", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" )),
+                selectInput("regressor3", "Einflussvariable 3", choices = c("Fertility", "Agriculture", "Education", "Catholic", "Infant.Mortality" ))
+                
+              ),
+              mainPanel(tags$h4("Modelle:"),
+                        actionButton("analysis","Analyze!"),
+                        verbatimTextOutput("stepmodel")
+              )
+            )
     ))
 
   
@@ -65,8 +77,6 @@ server <- function(input, output){
            "Infant.Mortality" = swiss$Infant.Mortality
            )
   })
-  
- 
   output$rawdata_swiss <- renderTable({
     dataset <- swiss
     dataset})  # head(dataset)
@@ -91,13 +101,15 @@ server <- function(input, output){
     dataset <- datasetInput()
     pairs(swiss, lower.panel = panel.smooth, upper.panel = panel.cor,
           gap=0, row1attop=FALSE, main = "Scatterplot")})
+  
+  output$stepmodel <-  renderPrint({
+    fit <- lm(swiss[,input$regressand] ~ swiss[,input$regressor1] + swiss[,input$regressor2] + swiss[,input$regressor3])
+    step(fit)})
 }
 
 
-  output$regression <-  renderPrint({
-    fit <- lm(swiss[,input$dataset] ~ Agriculture + Catholic + Fertility + Infant.Mortality)
-    step(fit)})
-    }
+
+    
 #     fit <- lm(swiss[,input$outcome] ~ swiss[,input$indepvar])
 #names(fit$coefficients) <- c("Intercept", input$var2)
 #summary(fit)
