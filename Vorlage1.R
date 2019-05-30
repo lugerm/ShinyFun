@@ -59,7 +59,9 @@ ui <- fluidPage(
               ),
               mainPanel(tags$h4("Modelle:"),
                         actionButton("analysis","Analyze!"),
-                        verbatimTextOutput("stepmodel")
+                        verbatimTextOutput("stepmodel"),
+                        verbatimTextOutput("modelFormula"),
+                        verbatimTextOutput("modelSummary")
               )
             )
     ))
@@ -102,9 +104,27 @@ server <- function(input, output){
     pairs(swiss, lower.panel = panel.smooth, upper.panel = panel.cor,
           gap=0, row1attop=FALSE, main = "Scatterplot")})
   
-  output$stepmodel <-  renderPrint({
-    fit <- lm(swiss[,input$regressand] ~ swiss[,input$regressor1] + swiss[,input$regressor2] + swiss[,input$regressor3])
-    step(fit)})
+  #output$stepmodel <-  renderPrint({
+   # fit <- lm(swiss[,input$regressand] ~ swiss[,input$regressor1] + swiss[,input$regressor2] + swiss[,input$regressor3])
+    #names(fit$coefficients) <- c("Intercept", input$regressor1, input$regressor2, input$regressor3)
+    #step(fit)})
+  
+  myformula <- reactive({
+    expln <- paste(c(input$regressor1, input$regressor2, input$regressor3), collapse = "+")
+    as.formula(paste(input$regressand, " ~ ", expln))
+  })
+  
+  mod <- eventReactive(input$analysis, {
+    lm(myformula(), data = swiss)
+  })
+  
+  output$modelFormula <- renderPrint({
+    myformula()
+  })
+  
+  output$modelSummary <- renderPrint({
+    summary(mod())
+  })
 }
 
 
